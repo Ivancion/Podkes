@@ -7,7 +7,7 @@ import androidx.paging.cachedIn
 import com.example.podcastapp.domain.model.Genre
 import com.example.podcastapp.domain.use_case.GetBestPodcastsUseCase
 import com.example.podcastapp.domain.use_case.GetGenresUseCase
-import com.example.podcastapp.domain.use_case.LoadGenresUseCase
+import com.example.podcastapp.domain.use_case.CacheGenresUseCase
 import com.example.podcastapp.other.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +18,6 @@ import javax.inject.Inject
 @HiltViewModel
 class MainFeedViewModel @Inject constructor(
     private val getGenresUseCase: GetGenresUseCase,
-    private val loadGenresUseCase: LoadGenresUseCase,
     private val bestPodcastsUseCase: GetBestPodcastsUseCase
 ) : ViewModel() {
 

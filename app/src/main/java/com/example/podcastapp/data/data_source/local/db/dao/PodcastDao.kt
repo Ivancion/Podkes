@@ -23,8 +23,4 @@ interface PodcastDao {
 
     @Query("SELECT * FROM podcast_table WHERE id = :id")
     fun getPodcastById(id: String): PodcastEntity
-
-    @Transaction
-    @Query("SELECT * FROM podcast_details_table")
-    fun getPodcastsWithEpisodes(): List<PodcastDetailsWithEpisodes>
 }

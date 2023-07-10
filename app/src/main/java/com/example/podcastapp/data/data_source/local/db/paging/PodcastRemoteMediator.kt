@@ -11,7 +11,7 @@ import com.example.podcastapp.data.data_source.local.db.entity.PodcastEntity
 import com.example.podcastapp.data.data_source.remote.PodcastApi
 import com.example.podcastapp.data.data_source.remote.dto.BestPodcastDto
 import com.example.podcastapp.data.data_source.local.db.entity.PodcastRemoteKeys
-import com.example.podcastapp.data.data_source.mappers.asPodcastEntity
+import com.example.podcastapp.data.mappers.asPodcastEntity
 
 @OptIn(ExperimentalPagingApi::class)
 class PodcastRemoteMediator(

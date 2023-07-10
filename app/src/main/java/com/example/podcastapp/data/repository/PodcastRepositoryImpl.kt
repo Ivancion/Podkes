@@ -10,10 +10,10 @@ import com.example.podcastapp.data.data_source.local.db.PodcastDatabase
 import com.example.podcastapp.data.data_source.local.db.paging.PodcastRemoteMediator
 import com.example.podcastapp.data.data_source.local.file_store.FileCacheManager
 import com.example.podcastapp.data.data_source.local.file_store.FileCacheManagers
-import com.example.podcastapp.data.data_source.mappers.asGenre
-import com.example.podcastapp.data.data_source.mappers.asLanguages
-import com.example.podcastapp.data.data_source.mappers.asPodcast
-import com.example.podcastapp.data.data_source.mappers.asRegions
+import com.example.podcastapp.data.mappers.asGenre
+import com.example.podcastapp.data.mappers.asLanguages
+import com.example.podcastapp.data.mappers.asPodcast
+import com.example.podcastapp.data.mappers.asRegions
 import com.example.podcastapp.data.data_source.remote.PodcastApi
 import com.example.podcastapp.data.data_source.remote.dto.GenresResponse
 import com.example.podcastapp.data.data_source.remote.dto.LanguagesResponse

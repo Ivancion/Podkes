@@ -1,4 +1,4 @@
-package com.example.podcastapp.data.data_source.mappers
+package com.example.podcastapp.data.mappers
 
 import com.example.podcastapp.data.data_source.local.db.entity.PodcastDetailsEntity
 import com.example.podcastapp.data.data_source.local.db.entity.PodcastDetailsWithEpisodes

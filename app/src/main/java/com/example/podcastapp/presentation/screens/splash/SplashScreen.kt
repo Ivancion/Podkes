@@ -37,7 +37,7 @@ fun SplashScreen(
     val state = viewModel.screenState.collectAsState()
 
     LaunchedEffect(true) {
-        viewModel.loadConfigData()
+        viewModel.cacheUtilData()
     }
 
     LaunchedEffect(key1 = state.value) {
