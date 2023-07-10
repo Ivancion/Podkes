@@ -15,10 +15,4 @@ interface PodcastRepository {
         region: String?,
         language: String?
     ): Flow<PagingData<Podcast>>
-
-    suspend fun getGenres(): Resource<List<Genre>>
-
-    suspend fun getRegions(): Resource<Regions>
-
-    suspend fun getLanguages(): Resource<Languages>
 }

@@ -2,8 +2,7 @@ package com.example.podcastapp.data.data_source.local.db
 
 import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter
-import com.example.podcastapp.data.data_source.local.file_store.JsonConverter
-import com.example.podcastapp.domain.model.Genre
+import com.example.podcastapp.data.json_converter.JsonConverter
 import com.google.gson.reflect.TypeToken
 
 @ProvidedTypeConverter

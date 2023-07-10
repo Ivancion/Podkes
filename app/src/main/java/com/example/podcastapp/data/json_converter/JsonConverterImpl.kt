@@ -1,8 +1,7 @@
-package com.example.podcastapp.data.data_source.local.file_store
+package com.example.podcastapp.data.json_converter
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.lang.reflect.Type
 
 class JsonConverterImpl(
     private val gson: Gson

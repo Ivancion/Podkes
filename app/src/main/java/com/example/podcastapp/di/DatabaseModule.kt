@@ -4,12 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import com.example.podcastapp.data.data_source.local.db.DataConverter
 import com.example.podcastapp.data.data_source.local.db.PodcastDatabase
-import com.example.podcastapp.data.data_source.local.file_store.FileCacheManagers
-import com.example.podcastapp.data.data_source.local.file_store.GenresFileCacheManager
-import com.example.podcastapp.data.data_source.local.file_store.JsonConverter
-import com.example.podcastapp.data.data_source.local.file_store.JsonConverterImpl
-import com.example.podcastapp.data.data_source.local.file_store.LanguagesFileCacheManager
-import com.example.podcastapp.data.data_source.local.file_store.RegionsFileCacheManager
+import com.example.podcastapp.data.json_converter.JsonConverter
+import com.example.podcastapp.data.json_converter.JsonConverterImpl
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
@@ -21,19 +17,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
-
-    @Singleton
-    @Provides
-    fun provideFileCacheManagers(
-        @ApplicationContext context: Context,
-        jsonConverter: JsonConverter
-    ): FileCacheManagers {
-        return FileCacheManagers(
-            genresFileCacheManager = GenresFileCacheManager(context, jsonConverter),
-            regionsFileCacheManager = RegionsFileCacheManager(context, jsonConverter),
-            languagesFileCacheManager = LanguagesFileCacheManager(context, jsonConverter)
-        )
-    }
 
     @Singleton
     @Provides

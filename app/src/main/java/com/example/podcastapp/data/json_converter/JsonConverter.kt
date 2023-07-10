@@ -1,4 +1,4 @@
-package com.example.podcastapp.data.data_source.local.file_store
+package com.example.podcastapp.data.json_converter
 
 import com.google.gson.reflect.TypeToken
 
