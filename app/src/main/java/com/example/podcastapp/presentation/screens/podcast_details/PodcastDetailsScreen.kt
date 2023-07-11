@@ -5,7 +5,6 @@ import android.text.Html.FROM_HTML_MODE_LEGACY
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -53,7 +51,7 @@ fun PodcastDetailsScreen(
 
     val episodes = viewModel.podcastEpisodes.collectAsLazyPagingItems()
     val podcastDetails = viewModel.podcastDetails.collectAsState()
-    val isShowFullDescription = viewModel.isShowFullDescription.collectAsState()
+    val isFullDescription = viewModel.isFullDescription.collectAsState()
 
     LazyColumn(
         modifier = Modifier
@@ -64,9 +62,9 @@ fun PodcastDetailsScreen(
             item {
                 PodcastDetailsSection(
                     podcastDetails = details,
-                    isShowFullDescription = isShowFullDescription.value,
+                    isFullDescription = isFullDescription.value,
                     onShowMoreClick = {
-                        viewModel.showFullDescription()
+                        viewModel.toggleDescriptionVisibility()
                     }
                 )
             }
@@ -92,50 +90,54 @@ fun EpisodeItem(
     formattedPubDate: (Long) -> String,
     isLastItem: Boolean
 ) {
-    Column(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.Top
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(100.dp)
         ) {
-            AsyncImage(
-                modifier = Modifier.size(80.dp),
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(episode.image)
-                    .crossfade(1000)
-                    .crossfade(true)
-                    .build(),
-                contentDescription = null,
-                contentScale = ContentScale.Crop
-            )
-            Spacer(modifier = Modifier.width(10.dp))
-            Column {
-                Text(
-                    text = episode.title,
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.Top
+            ) {
+                AsyncImage(
+                    modifier = Modifier.size(80.dp),
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(episode.image)
+                        .crossfade(1000)
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop
                 )
-                Spacer(modifier = Modifier.height(6.dp))
-                Text(
-                    text = Html.fromHtml(episode.description, FROM_HTML_MODE_LEGACY).toString(),
-                    style = MaterialTheme.typography.bodySmall,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Spacer(modifier = Modifier.height(6.dp))
-                Row {
+                Spacer(modifier = Modifier.width(10.dp))
+                Column {
                     Text(
-                        text = formattedPubDate(episode.pubDateMs),
-                        style = MaterialTheme.typography.bodySmall
+                        text = episode.title,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
                     )
-                    Spacer(modifier = Modifier.width(15.dp))
+                    Spacer(modifier = Modifier.height(6.dp))
                     Text(
-                        text = "${episode.audioLengthSec} sec",
-                        style = MaterialTheme.typography.bodySmall
+                        text = Html.fromHtml(episode.description, FROM_HTML_MODE_LEGACY).toString(),
+                        style = MaterialTheme.typography.bodySmall,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
                     )
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Row {
+                        Text(
+                            text = formattedPubDate(episode.pubDateMs),
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                        Spacer(modifier = Modifier.width(15.dp))
+                        Text(
+                            text = "${episode.audioLengthSec} sec",
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
                 }
             }
         }
@@ -155,7 +157,7 @@ fun EpisodeItem(
 @Composable
 fun PodcastDetailsSection(
     podcastDetails: PodcastDetails,
-    isShowFullDescription: Boolean,
+    isFullDescription: Boolean,
     onShowMoreClick: () -> Unit
 ) {
     Column(
@@ -228,21 +230,19 @@ fun PodcastDetailsSection(
                 text = Html.fromHtml(podcastDetails.description, FROM_HTML_MODE_LEGACY).toString(),
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Start,
-                maxLines = if (!isShowFullDescription) 4 else Int.MAX_VALUE,
+                maxLines = if (!isFullDescription) 4 else Int.MAX_VALUE,
                 overflow = TextOverflow.Ellipsis
             )
             Spacer(modifier = Modifier.height(6.dp))
-            if (!isShowFullDescription) {
-                Text(
-                    modifier = Modifier
-                        .clickable {
-                            onShowMoreClick()
-                        },
-                    text = "Show More",
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.Bold
-                )
-            }
+            Text(
+                modifier = Modifier
+                    .clickable {
+                        onShowMoreClick()
+                    },
+                text = if(isFullDescription) "Show Less" else "Show More",
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 }

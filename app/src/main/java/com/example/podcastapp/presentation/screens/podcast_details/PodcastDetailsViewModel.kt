@@ -18,15 +18,15 @@ class PodcastDetailsViewModel @Inject constructor(
     private val getFormattedDateUseCase: GetFormattedDateUseCase
 ): ViewModel() {
 
-    private val _isShowFullDescription = MutableStateFlow(false)
-    val isShowFullDescription = _isShowFullDescription.asStateFlow()
+    private val _isFullDescription = MutableStateFlow(false)
+    val isFullDescription = _isFullDescription.asStateFlow()
 
     val podcastEpisodes = podcastDetailsRepository.getPodcastEpisodes(checkNotNull(savedStateHandle["id"])).cachedIn(viewModelScope)
 
     val podcastDetails = podcastDetailsRepository.podcastDetails
 
-    fun showFullDescription() {
-        _isShowFullDescription.value = true
+    fun toggleDescriptionVisibility() {
+        _isFullDescription.value = !isFullDescription.value
     }
 
     fun formatPublishDate(date: Long): String {
