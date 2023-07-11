@@ -2,8 +2,11 @@ package com.example.podcastapp.presentation.screens.main_feed
 
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridItemScope
@@ -24,8 +28,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.SuggestionChipDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,6 +45,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.example.podcastapp.data.data_source.remote.dto.BestPodcastDto
+import com.example.podcastapp.domain.model.Genre
 import com.example.podcastapp.domain.model.Podcast
 import com.example.podcastapp.presentation.screens.components.SearchTextField
 import com.example.podcastapp.presentation.screens.destinations.PodcastDetailsScreenDestination
@@ -54,6 +61,7 @@ fun MainFeedScreen(
 ) {
     val genres = viewModel.genres.collectAsState()
     val bestPodcasts = viewModel.bestPodcasts.collectAsLazyPagingItems()
+    val selectedGenre = viewModel.selectedGenre.collectAsState()
 
     Log.d("MainFeedScreen", bestPodcasts.itemCount.toString())
 
@@ -74,23 +82,10 @@ fun MainFeedScreen(
             contentPadding = PaddingValues(horizontal = 24.dp)
         ) {
             items(genres.value) { genre ->
-                SuggestionChip(
-                    onClick = {},
-                    label = {
-                        Text(
-                            text = genre.name,
-                            style = MaterialTheme.typography.labelLarge
-                        )
-                    },
-                    enabled = false,
-                    colors = SuggestionChipDefaults.suggestionChipColors(
-                        disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                        containerColor = MaterialTheme.colorScheme.tertiaryContainer
-                    ),
-                    border = SuggestionChipDefaults.suggestionChipBorder(
-                        disabledBorderColor = MaterialTheme.colorScheme.surfaceVariant,
-                        borderColor = MaterialTheme.colorScheme.tertiaryContainer
-                    )
+                GenreItem(
+                    genre = genre,
+                    isSelected = selectedGenre.value == genre,
+                    onGenreClick = viewModel::selectGenre
                 )
             }
         }
@@ -101,22 +96,32 @@ fun MainFeedScreen(
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold
         )
-        LazyVerticalGrid(
+        LazyColumn(
             modifier = Modifier.padding(24.dp),
-            columns = GridCells.Fixed(2),
+//            columns = GridCells.Fixed(2),
             verticalArrangement = Arrangement.spacedBy(12.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+//            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            items(bestPodcasts) { podcast ->
-                podcast?.let {
+            items(bestPodcasts.itemCount) { index ->
+                bestPodcasts[index]?.let { podcast ->
                     PodcastItem(
-                        podcast = it,
-                        onPodcastClick = { podcast ->
-                            navigator.navigate(PodcastDetailsScreenDestination(podcast.id))
+                        podcast = podcast,
+                        onPodcastClick = {
+                            navigator.navigate(PodcastDetailsScreenDestination(it.id))
                         }
                     )
                 }
             }
+//            items(bestPodcasts) { podcast ->
+//                podcast?.let {
+//                    PodcastItem(
+//                        podcast = it,
+//                        onPodcastClick = { podcast ->
+//                            navigator.navigate(PodcastDetailsScreenDestination(podcast.id))
+//                        }
+//                    )
+//                }
+//            }
         }
     }
 }
@@ -164,7 +169,39 @@ fun PodcastItem(
     }
 }
 
-fun <T: Any> LazyGridScope.items(
+@Composable
+fun GenreItem(
+    genre: Genre,
+    isSelected: Boolean,
+    onGenreClick: (Genre) -> Unit
+) {
+    val interactionSource = remember {
+        MutableInteractionSource()
+    }
+    Box(
+        modifier = Modifier
+            .background(
+                color = if (!isSelected) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.primary,
+                shape = MaterialTheme.shapes.extraLarge
+            )
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = {
+                    onGenreClick(genre)
+                }
+            )
+            .padding(12.dp)
+    ) {
+        Text(
+            text = genre.name,
+            style = MaterialTheme.typography.bodyMedium,
+            color = if(!isSelected) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onPrimary
+        )
+    }
+}
+
+fun <T : Any> LazyGridScope.items(
     lazyPagingItems: LazyPagingItems<T>,
     itemContent: @Composable LazyGridItemScope.(value: T?) -> Unit
 ) {

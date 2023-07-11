@@ -31,7 +31,6 @@ class PodcastRemoteMediator(
     ): MediatorResult {
         return try {
             val currentPage = when (loadType) {
-
                 LoadType.REFRESH -> 1
                 LoadType.PREPEND -> return MediatorResult.Success(
                     endOfPaginationReached = true
