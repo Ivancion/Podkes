@@ -1,8 +1,8 @@
 package com.example.podcastapp.data.repository
 
 import com.example.podcastapp.data.data_source.local.db.PodcastDatabase
-import com.example.podcastapp.data.mappers.asGenre
-import com.example.podcastapp.data.mappers.asGenreEntity
+import com.example.podcastapp.domain.mappers.asGenre
+import com.example.podcastapp.domain.mappers.asGenreEntity
 import com.example.podcastapp.data.data_source.remote.PodcastApi
 import com.example.podcastapp.domain.model.Genre
 import com.example.podcastapp.domain.repository.GenresRepository
@@ -24,15 +24,11 @@ class GenresRepositoryImpl(
         )
     }
 
-    override suspend fun getAllGenres(): Resource<List<Genre>> {
+    override suspend fun getAllGenres(): List<Genre> {
         return getData(
-            getDataFromNetwork = ::getDataFromNetwork,
             getDataFromDb = {
                 db.genresDao().getAllGenres().map { it.asGenre() }
-            },
-            saveDataIntoDb = ::saveDataIntoDb,
-            haveInternetConnection = connectionObserver.isInternetAvailable(),
-            haveCachedData = haveCachedData()
+            }
         )
     }
 

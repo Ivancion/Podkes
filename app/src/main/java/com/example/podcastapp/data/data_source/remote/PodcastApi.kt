@@ -4,6 +4,7 @@ import com.example.podcastapp.data.data_source.remote.dto.BestPodcastsResponse
 import com.example.podcastapp.data.data_source.remote.dto.GenresResponse
 import com.example.podcastapp.data.data_source.remote.dto.LanguagesResponse
 import com.example.podcastapp.data.data_source.remote.dto.PodcastDetailsDto
+import com.example.podcastapp.data.data_source.remote.dto.PodcastSearchResponse
 import com.example.podcastapp.data.data_source.remote.dto.RegionsResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -33,4 +34,14 @@ interface PodcastApi {
 
     @GET("languages")
     suspend fun getLanguages(): LanguagesResponse
+
+    @GET("search")
+    suspend fun searchPodcasts(
+        @Query("q") query: String,
+        @Query("type") type: String = "podcast",
+        @Query("language") language: String?,
+        @Query("region") region: String?,
+        @Query("genre_ids") genreId: Int?,
+        @Query("offset") offset: Int
+    ): PodcastSearchResponse
 }

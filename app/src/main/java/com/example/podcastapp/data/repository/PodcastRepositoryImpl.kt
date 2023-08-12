@@ -8,7 +8,8 @@ import androidx.paging.map
 import com.example.podcastapp.data.data_source.local.db.PodcastDatabase
 import com.example.podcastapp.data.data_source.local.db.paging.PodcastRemoteMediator
 import com.example.podcastapp.data.data_source.remote.PodcastApi
-import com.example.podcastapp.data.mappers.asPodcast
+import com.example.podcastapp.data.data_source.remote.paging.PodcastSearchPagingSource
+import com.example.podcastapp.domain.mappers.asPodcast
 import com.example.podcastapp.domain.model.Podcast
 import com.example.podcastapp.domain.repository.PodcastRepository
 import com.example.podcastapp.other.connection.InternetConnectionObserver
@@ -33,7 +34,7 @@ class PodcastRepositoryImpl(
 //            )
         }
         return Pager(
-            config = PagingConfig(20),
+            config = PagingConfig(pageSize = 20, initialLoadSize = 20),
             remoteMediator = PodcastRemoteMediator(
                 podcastApi = api,
                 podcastDatabase = db,
@@ -49,5 +50,23 @@ class PodcastRepositoryImpl(
             }
     }
 
-
+    override fun searchPodcasts(
+        query: String,
+        genreId: Int?,
+        region: String?,
+        language: String?
+    ): Flow<PagingData<Podcast>> {
+        return Pager(
+            config = PagingConfig(pageSize = 10, initialLoadSize = 10),
+            pagingSourceFactory = {
+                PodcastSearchPagingSource(
+                    api, query, genreId, region, language
+                )
+            }
+        )
+            .flow
+            .map { pagingData ->
+                pagingData.map { it.asPodcast() }
+            }
+    }
 }

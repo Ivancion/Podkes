@@ -7,7 +7,7 @@ interface GenresRepository {
 
     suspend fun cacheGenres(): Resource<Unit>
 
-    suspend fun getAllGenres(): Resource<List<Genre>>
+    suspend fun getAllGenres(): List<Genre>
 
     suspend fun getGenresByIds(ids: List<Int>): List<Genre>
 }

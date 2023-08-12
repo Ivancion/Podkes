@@ -29,29 +29,6 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideHttpClient() =
-        HttpClient(Android) {
-            defaultRequest {
-                url(ApiRoutes.BASE_URL)
-                headers {
-                    append("X-ListenAPI-Key", "2e9a0504bed64edfb0f2c71400bcebcb")
-                }
-            }
-            install(Logging) {
-                level = LogLevel.ALL
-            }
-            install(ContentNegotiation) {
-                gson()
-            }
-            install(HttpTimeout) {
-                connectTimeoutMillis = 10000
-                requestTimeoutMillis = 10000
-                socketTimeoutMillis = 10000
-            }
-        }
-
-    @Singleton
-    @Provides
     fun provideOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor { chain ->
@@ -68,9 +45,6 @@ object NetworkModule {
     @Singleton
     @Provides
     fun providePodcastApi(httpClient: OkHttpClient): PodcastApi {
-//        return PodcastApiImpl(
-//            client = httpClient
-//        )
         return Retrofit.Builder()
             .baseUrl(ApiRoutes.TEST_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())

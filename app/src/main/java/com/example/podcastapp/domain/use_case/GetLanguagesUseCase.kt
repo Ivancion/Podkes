@@ -11,7 +11,7 @@ class GetLanguagesUseCase @Inject constructor(
     private val languagesRepository: LanguagesRepository
 ) {
 
-    suspend operator fun invoke(): Resource<Languages> {
+    suspend operator fun invoke(): Languages {
         return languagesRepository.getLanguages()
     }
 }

@@ -2,8 +2,8 @@ package com.example.podcastapp.data.repository
 
 import com.example.podcastapp.data.data_source.local.db.PodcastDatabase
 import com.example.podcastapp.data.data_source.remote.PodcastApi
-import com.example.podcastapp.data.mappers.asLanguageEntities
-import com.example.podcastapp.data.mappers.asLanguages
+import com.example.podcastapp.domain.mappers.asLanguageEntities
+import com.example.podcastapp.domain.mappers.asLanguages
 import com.example.podcastapp.domain.model.Languages
 import com.example.podcastapp.domain.repository.LanguagesRepository
 import com.example.podcastapp.other.Resource
@@ -24,15 +24,11 @@ class LanguagesRepositoryImpl(
         )
     }
 
-    override suspend fun getLanguages(): Resource<Languages> {
+    override suspend fun getLanguages(): Languages {
         return getData(
-            getDataFromNetwork = ::getDataFromNetwork,
             getDataFromDb = {
                 db.languagesDao().getAllLanguages().asLanguages()
-            },
-            saveDataIntoDb = ::saveDataIntoDb,
-            haveInternetConnection = connectionObserver.isInternetAvailable(),
-            haveCachedData = haveCachedData()
+            }
         )
     }
 

@@ -14,9 +14,8 @@ import com.example.podcastapp.data.data_source.local.db.entity.GenreEntity
 import com.example.podcastapp.data.data_source.local.db.entity.LanguageEntity
 import com.example.podcastapp.data.data_source.local.db.entity.PodcastDetailsEntity
 import com.example.podcastapp.data.data_source.local.db.entity.PodcastEntity
-import com.example.podcastapp.data.data_source.remote.dto.BestPodcastDto
 import com.example.podcastapp.data.data_source.local.db.entity.PodcastRemoteKeys
-import com.example.podcastapp.data.data_source.local.db.entity.RegionsEntity
+import com.example.podcastapp.data.data_source.local.db.entity.RegionEntity
 
 @Database(
     [
@@ -25,7 +24,7 @@ import com.example.podcastapp.data.data_source.local.db.entity.RegionsEntity
         PodcastDetailsEntity::class,
         EpisodeEntity::class,
         GenreEntity::class,
-        RegionsEntity::class,
+        RegionEntity::class,
         LanguageEntity::class
     ],
     version = 1

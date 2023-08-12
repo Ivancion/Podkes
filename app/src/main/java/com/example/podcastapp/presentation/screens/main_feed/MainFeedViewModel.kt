@@ -7,6 +7,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.podcastapp.domain.model.Genre
 import com.example.podcastapp.domain.model.Podcast
+import com.example.podcastapp.domain.use_case.CacheRegionsUseCase
 import com.example.podcastapp.domain.use_case.GetBestPodcastsUseCase
 import com.example.podcastapp.domain.use_case.GetGenresUseCase
 import com.example.podcastapp.other.Resource
@@ -45,16 +46,7 @@ class MainFeedViewModel @Inject constructor(
 
     private fun getAllGenres() {
         viewModelScope.launch {
-            when (val genres = getGenresUseCase()) {
-                is Resource.Success -> {
-                    Log.d("MainFeedViewModel", genres.data.toString())
-                    _genres.value = genres.data
-                }
-                is Resource.Error -> {
-                    Log.d("MainFeedViewModel", genres.exception)
-                }
-                Resource.LoadingState -> {}
-            }
+            _genres.value = getGenresUseCase()
         }
     }
 

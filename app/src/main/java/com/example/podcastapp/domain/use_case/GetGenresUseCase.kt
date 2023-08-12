@@ -9,7 +9,7 @@ class GetGenresUseCase @Inject constructor(
     private val genresRepository: GenresRepository
 ) {
 
-    suspend operator fun invoke(): Resource<List<Genre>> {
+    suspend operator fun invoke(): List<Genre> {
         return genresRepository.getAllGenres()
     }
 }

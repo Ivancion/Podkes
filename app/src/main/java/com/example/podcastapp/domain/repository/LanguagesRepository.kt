@@ -7,5 +7,5 @@ interface LanguagesRepository {
 
     suspend fun cacheLanguages(): Resource<Unit>
 
-    suspend fun getLanguages(): Resource<Languages>
+    suspend fun getLanguages(): Languages
 }

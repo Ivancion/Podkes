@@ -4,8 +4,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.example.podcastapp.data.mappers.asEpisode
-import com.example.podcastapp.data.mappers.asPodcastDetails
+import com.example.podcastapp.domain.mappers.asEpisode
+import com.example.podcastapp.domain.mappers.asPodcastDetails
 import com.example.podcastapp.data.data_source.remote.PodcastApi
 import com.example.podcastapp.data.data_source.remote.paging.EpisodesPagingSource
 import com.example.podcastapp.domain.model.Episode
