@@ -2,6 +2,7 @@ package com.example.podcastapp.presentation.screens.podcast_details
 
 import android.text.Html
 import android.text.Html.FROM_HTML_MODE_LEGACY
+import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,6 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,8 +40,11 @@ import coil.request.ImageRequest
 import com.example.podcastapp.R
 import com.example.podcastapp.domain.model.Episode
 import com.example.podcastapp.domain.model.PodcastDetails
+import com.example.podcastapp.presentation.screens.destinations.PodcastPlayerScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Destination
 @Composable
@@ -75,6 +80,10 @@ fun PodcastDetailsScreen(
         items(episodes.itemCount) {
             episodes[it]?.let { episode ->
                 EpisodeItem(
+                    modifier = Modifier.clickable {
+                        viewModel.setMediaItems(listOf(episode))
+                        navigator.navigate(PodcastPlayerScreenDestination())
+                    },
                     episode = episode,
                     formattedPubDate = viewModel::formatPublishDate,
                     isLastItem = it == episodes.itemCount - 1
@@ -86,11 +95,15 @@ fun PodcastDetailsScreen(
 
 @Composable
 fun EpisodeItem(
+    modifier: Modifier = Modifier,
     episode: Episode,
     formattedPubDate: (Long) -> String,
     isLastItem: Boolean
 ) {
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -239,7 +252,7 @@ fun PodcastDetailsSection(
                     .clickable {
                         onShowMoreClick()
                     },
-                text = if(isFullDescription) "Show Less" else "Show More",
+                text = if (isFullDescription) "Show Less" else "Show More",
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Bold
             )
